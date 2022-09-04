@@ -174,6 +174,7 @@ function render(message, from, createdAt, id, language ) {
 
     if ($('#change-style').val() == "dark") {
         styleClass = "comment-dark"
+        styleButton = ""
     }
 
     if(language == "ru") {
@@ -183,7 +184,7 @@ function render(message, from, createdAt, id, language ) {
             '                <div>' + message + '</div>\n' +
             '                <div>\n' +
             '                 <p><b>Лайки: </b><span></span></p>\n' +
-            '                 <button id="' +id +'" class="like btn btn-primary btn-sm" onClick="addLikeToComment(this)">\n' +
+            '                 <button id="' +id +'" class="like btn btn-primary btn-sm'+btn-info+'" onClick="addLikeToComment(this)">\n' +
             '                 <i class="fa-solid fa-thumbs-up"></i></button>\n' +
             '                </div>\n' +
             '                </div>\n'
@@ -195,7 +196,7 @@ function render(message, from, createdAt, id, language ) {
             '                <div>' + message + '</div>\n' +
             '                <div>\n' +
             '                 <p><b>Likes: </b><span></span></p>\n' +
-            '                 <button id="' +id +'" class="like btn btn-primary btn-sm" onClick="addLikeToComment(this)">\n' +
+            '                 <button id="' +id +'" class="like btn btn-primary btn-sm'+btn-info+'" onClick="addLikeToComment(this)">\n' +
             '                 <i class="fa-solid fa-thumbs-up"></i></button>\n' +
             '                </div>\n' +
             '                </div>\n'
