@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Collection</title>
+    <link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon" >
+    <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon" >
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css} "/>
+    <link th:rel="stylesheet" th:href="@{/css/simplemde.min.css}"/>
+    <link th:rel="stylesheet" th:href="@{/css/collection.css}"/>
+</head>
+<body class="gradient-custom-3">
+<section>
+    <header class="p-3 bg-dark text-white">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center justify-content-center">
+                <div>
+                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <li>
+                            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                                <input id="search" type="search" class="form-control form-control-dark" placeholder="Search..."
+                                       aria-label="Search">
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                <div class="text-end">
+                    <div>
+                        <select id="change-style" class="form-select">
+                            <option  value="light" th:selected="${style eq null or style eq 'light'}">light</option>
+                            <option value="dark" th:selected="${style eq 'dark'}">dark</option>
+                        </select>
+                        <select id="lang" class="form-select">
+                            <option value="en" th:selected="${lang eq null or lang eq 'en'}">en</option>
+                            <option value="ru" th:selected="${lang eq 'ru'}">ru</option>
+                        </select>
+                        <span sec:authorize="hasRole('ADMIN')"><a href="/admin">admin</a></span>
+                        <a sec:authorize="isAuthenticated()" th:href="${'/' + #authentication.name}" th:text="${#authentication.name}"></a>
+                        <button sec:authorize="isAnonymous()" id="login" type="button" class="btn btn-primary" onclick="redirect('/login')">Login</button>
+                        <button sec:authorize="isAuthenticated()" id="logout" type="button" class="btn btn-primary" onclick="redirect('/logout')">Logout</button>
+                        <button sec:authorize="isAnonymous()" id="sign-up" type="button" class="btn btn-primary" onclick="redirect('/sign-up')">Sign-up</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </header>
+    <main class="container">
+    <article>
+        <div class="row justify-content-center mt-5">
+            <div class="col-5 bg-light rounded">
+                <div><img th:src="${collection.imgLink}" alt="collection image" class="img-thumbnail mt-2 mb-2"></div>
+                <div><span th:utext="'<b>Collection name </b>' +${collection.name}"></span></div>
+                <div><span th:utext="'<b>Collection topic </b>' + ${collection.topic}"></span></div>
+                <div class="description">
+                    <div><span><b>Description </b></span>
+                        <button class="btn btn-primary btn-sm" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authentication.name == pageOwner}" onclick="toggleDisplay('#edit-description')">Edit</button>
+                    </div>
+                    <div th:fragment="description" th:utext="${collection.description}" class="description-value">
+                    </div>
+                </div>
+                <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authentication.name == pageOwner and #lists.isEmpty(collection.fields)}">
+                    <button class="btn btn-primary btn-sm mb-2"  onclick=" toggleDisplay('#fields')">Add fields</button>
+                </div>
+                <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authentication.name == pageOwner}">
+                    <button class="btn btn-primary btn-sm mb-2"   onclick=" toggleDisplay('#create-item')">Create item</button>
+                </div>
+                <div th:if="${not #lists.isEmpty(collection.fields)}">
+                    <div>
+                        <b>Declared Fields </b>
+                        <button th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authentication.name == pageOwner}" class="btn btn-primary btn-sm mb-2"   onclick=" toggleDisplay('#show-fields')">Show</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="edit-description" class="container" style="display: none">
+            <div class="row mt-1">
+                <div class="col">
+                    <form id="description" class="bg-light rounded"
+                          th:action="@{/api/app-collections/collections/add-description?id=} + ${collection.id}">
+                        <div class="form-group">
+                            <textarea type="text" rows="3" id="content" name="description" placeholder="Content"
+                                      class="form-control"
+                                      autocomplete="off"></textarea>
+                        </div>
+                        <button class="btn btn-primary ml-1 mb-1" type="submit">Save</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-1">
+            <div class="col-5 bg-light rounded">
+                <form th:action="@{/api/app-collections/collections/add-fields?id=} + ${collection.id}" id="fields" style="display: none">
+                    <div class="input-group mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Field type number 1</span>
+                        </div>
+                        <input type="text" name="number">
+                    </div>
+                    <div class="input-group mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Field type number 2</span>
+                        </div>
+                        <input type="text" name="number">
+                    </div>
+                    <div class="input-group mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Field type number 3</span>
+                        </div>
+                        <input type="text" name="number">
+                    </div>
+                    <div class="input-group mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Field type text 1</span>
+                        </div>
+                            <input type="text" name="text">
+                    </div>
+                    <div class="input-group mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Field type text 2</span>
+                        </div>
+                        <input type="text" name="text">
+                    </div>
+                    <div class="input-group mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Field type text 3</span>
+                        </div>
+                        <input type="text" name="text">
+                    </div>
+                    <div class="input-group mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Field type textarea 1</span>
+                        </div>
+                        <input type="text" name="textarea">
+                    </div>
+                    <div class="input-group mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Field type textarea 2</span>
+                        </div>
+                        <input type="text" name="textarea">
+                    </div>
+                    <div class="input-group mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Field type textarea 3</span>
+                        </div>
+                        <input type="text" name="textarea">
+                    </div>
+                    <div class="input-group mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Field type logic 1</span>
+                        </div>
+                        <input type="text" name="logic">
+                    </div>
+                    <div class="input-group mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Field type logic 2</span>
+                        </div>
+                        <input type="text" name="logic">
+                    </div>
+                    <div class="input-group mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Field type logic 3</span>
+                        </div>
+                        <input type="text" name="logic">
+                    </div>
+                    <div class="input-group mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Field type date 1</span>
+                        </div>
+                        <input type="text" name="date">
+                    </div>
+                    <div class="input-group mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Field type date 2</span>
+                        </div>
+                        <input type="text" name="date">
+                    </div>
+                    <div class="input-group mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Field type date 3</span>
+                        </div>
+                        <input type="text" name="date">
+                    </div>
+                    <button class="btn btn-primary mt-2 mb-2" type="submit">Save</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="show-fields" class="row justify-content-center mt-1" style="display: none">
+            <div class="col-5 bg-light rounded">
+                <p th:each="field : ${number}" th:text="${field.type} + ' ' + ${field.name}"></p>
+                <p th:each="field : ${text}" th:text="${field.type} + ' ' + ${field.name}"></p>
+                <p th:each="field : ${textarea}" th:text="${field.type} + ' ' + ${field.name}"></p>
+                <p th:each="field : ${logic}" th:text="${field.type} + ' ' + ${field.name}"></p>
+                <p th:each="field : ${date}" th:text="${field.type} + ' ' + ${field.name}"></p>
+            </div>
+        </div>
+
+
+        <div class="row justify-content-center mt-1">
+            <div class="col-5 bg-light rounded">
+                <form id="create-item" th:action="@{/api/app-collections/collections/add-item?id=} + ${collection.id}" style="display: none">
+                    <div class="input-group mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Name</span>
+                        </div>
+                        <input type="text" id="name" name="name" required/>
+                    </div>
+                    <div class="input-group mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Tags</span>
+                        </div>
+                        <input id="tag" name="tags" class="basicAutoComplete" type="text"
+                               autocomplete="off" required>
+                    </div>
+                    <button class="btn btn-primary btn-sm mt-1 mb-2" type="submit">Create</button>
+                </form>
+            </div>
+        </div>
+
+
+        <div class="row justify-content-center mt-1">
+            <div class="col-5 bg-light rounded">
+                <h5>List items</h5>
+                    <div class="mt-2 mb-2" th:each="item : ${collection.items}" th:id="${item.id}">
+                        <button class="btn btn-primary btn-sm" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authentication.name == pageOwner}" onclick="deleteItem(this)">Удалить</button>
+                        <a th:href="${collection.name + '/items/' + item.id}" th:text="${item.name}"></a>
+                    </div>
+            </div>
+        </div>
+
+    </article>
+    </main>
+    <footer>
+
+    </footer>
+</section>
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/autocomplete.min.js}"></script>
+<script th:src="@{/js/simplemde.min.js}"></script>
+<script th:src="@{/js/collection.js}"></script>
+</body>
+</html>

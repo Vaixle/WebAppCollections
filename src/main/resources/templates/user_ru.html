@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title th:text="${pageOwner}"></title>
+  <link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon" >
+  <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon" >
+  <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+  <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css} "/>
+  <link th:rel="stylesheet" th:href="@{/css/user.css} "/>
+</head>
+<body class="gradient-custom-3">
+<section>
+  <header class="p-3 bg-dark text-white">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center justify-content-center">
+        <div>
+          <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            <li>
+              <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                <input id="search" type="search" class="form-control form-control-dark" placeholder="Поиск..."
+                       aria-label="Search">
+              </form>
+            </li>
+          </ul>
+        </div>
+        <div class="text-end">
+          <div>
+            <select id="change-style" class="form-select">
+              <option  value="light" th:selected="${style eq null or style eq 'light'}">light</option>
+              <option value="dark" th:selected="${style eq 'dark'}">dark</option>
+            </select>
+            <select id="lang" class="form-select">
+              <option value="en" th:selected="${lang eq null or lang eq 'en'}">en</option>
+              <option value="ru" th:selected="${lang eq 'ru'}">ru</option>
+            </select>
+            <span sec:authorize="hasRole('ADMIN')"><a href="/admin">admin</a></span>
+            <a sec:authorize="isAuthenticated()" th:href="${'/' + #authentication.name}" th:text="${#authentication.name}"></a>
+            <button sec:authorize="isAnonymous()" id="login" type="button" class="btn btn-primary" onclick="redirect('/login')">Войти</button>
+            <button sec:authorize="isAuthenticated()" id="logout" type="button" class="btn btn-primary" onclick="redirect('/logout')">Выйти</button>
+            <button sec:authorize="isAnonymous()" id="sign-up" type="button" class="btn btn-primary" onclick="redirect('/sign-up')">Регистрация</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </header>
+  <main class="container">
+    <div class="row justify-content-center" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authentication.name == pageOwner}">
+      <div class="col-5 bg-light mt-5 rounded">
+        <form th:action="@{/api/app-collections/collections}">
+          <div class="form-group pt-2">
+            <label for="name"><b>Название коллекции</b></label>
+            <input id="name" name="name" type="text" placeholder="Введите название" required>
+          </div>
+          <div class="form-group">
+            <label for="topic"><b>Тема коллекции</b></label>
+            <select id="topic" name="topic" class="form-control">
+              <option value="stones" selected>Камни</option>
+              <option value="kinder surprise">Киндер сюрприз</option>
+              <option value="records">Пластинки</option>
+            </select>
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Upload</span>
+            </div>
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" name="image" id="file" required>
+              <label class="custom-file-label" for="file">Choose image</label>
+            </div>
+          </div>
+          <div class="pb-2">
+            <button class="btn btn-primary" type ="submit">Создать</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div >
+      <div  class="row justify-content-center">
+        <div id="collections" class="col-5 bg-light mt-5 rounded">
+          <h4 class="text-center">Коллекции</h4>
+          <div class="text-start pb-2"  th:id="${collection.id}" th:each="collection : ${collections}" th:fragment="collections">
+            <button class="btn btn-primary btn-sm" th:classappend="${style eq 'dark'} ? btn-info : ''" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authentication.name == pageOwner}" onclick="deleteCollection(this)">Удалить</button>
+            <a th:href="${username+'/collections/'+collection.name}" th:text="${collection.name}"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+
+  </footer>
+</section>
+
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/user.js}"></script>
+</body>
+</html>

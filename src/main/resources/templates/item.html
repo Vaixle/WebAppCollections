@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Item</title>
+    <link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon">
+    <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css} "/>
+    <link th:rel="stylesheet" th:href="@{/css/item.css} "/>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body class="gradient-custom-3">
+<section>
+    <header class="p-3 bg-dark text-white">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center justify-content-center">
+                <div>
+                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <li>
+                            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                                <input id="search" type="search" class="form-control form-control-dark"
+                                       placeholder="Search..."
+                                       aria-label="Search">
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                <div class="text-end">
+                    <div>
+                        <select id="change-style" class="form-select">
+                            <option  value="light" th:selected="${style eq null or style eq 'light'}">light</option>
+                            <option value="dark" th:selected="${style eq 'dark'}">dark</option>
+                        </select>
+                        <select id="lang" class="form-select">
+                            <option value="en" th:selected="${lang eq null or lang eq 'en'}">en</option>
+                            <option value="ru" th:selected="${lang eq 'ru'}">ru</option>
+                        </select>
+                        <span sec:authorize="hasRole('ADMIN')"><a href="/admin">admin</a></span>
+                        <a sec:authorize="isAuthenticated()" th:href="${'/' + #authentication.name}"
+                           th:text="${#authentication.name}"></a>
+                        <button sec:authorize="isAnonymous()" id="login" type="button"
+                                class="btn btn-primary" onclick="redirect('/login')">Login
+                        </button>
+                        <button sec:authorize="isAuthenticated()" id="logout" type="button" class="btn btn-primary"
+                                onclick="redirect('/logout')">Logout
+                        </button>
+                        <button sec:authorize="isAnonymous()" id="sign-up" type="button" class="btn btn-primary"
+                                onclick="redirect('/sign-up')">Sign-up
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </header>
+    <main class="container">
+        <article>
+            <div class="row justify-content-center mt-5">
+                <div class="col-5 bg-light rounded">
+                    <div>
+                        <p th:utext="'<b>Item name: </b>' + ${item.name}"></p>
+                    </div>
+                    <div class="mb-2">
+                        <p><b>Likes: </b><span th:if="${not #strings.isEmpty(likes)}" th:text="${likes}"></span></p>
+                        <button id="like" class="btn btn-primary" onclick="addLike(this)"
+                                th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
+                            <i class="fa-solid fa-thumbs-up"></i></button>
+                    </div>
+                    <div>
+                        <form id="fields">
+                            <div th:each="field : ${number}">
+                                <div>
+                                    <button class="btn btn-primary btn-sm" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authentication.name == pageOwner}"
+                                            type="button" onclick="toggleDisplay(this)">Edit
+                                    </button>
+                                    <div><b th:utext="${field.name} + ' '"> </b><span th:if="${not #strings.isEmpty(field.number)}" th:text="${field.number}"></span></div>
+                                </div>
+                                <div style="display: none">
+                                    <input type="number" th:name="${field.name}">
+                                    <button class="btn btn-primary btn-sm" th:id="${field.id}">Save</button>
+                                </div>
+                            </div>
+                            <div th:each="field : ${text}">
+                                <div>
+                                    <button class="btn btn-primary btn-sm" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authentication.name == pageOwner}"
+                                            type="button" onclick="toggleDisplay(this)">Edit
+                                    </button>
+                                    <div><b th:utext="${field.name} + ' '"> </b><span th:if="${not #strings.isEmpty(field.text)}" th:text="${field.text}"></span></div>
+                                </div>
+                                <div style="display: none">
+                                    <input type="text" th:name="${field.name}">
+                                    <button class="btn btn-primary btn-sm" th:id="${field.id}">Save</button>
+                                </div>
+                            </div>
+                            <div th:each="field : ${textarea}">
+                                <div>
+                                    <button class="btn btn-primary btn-sm" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authentication.name == pageOwner}"
+                                            type="button" onclick="toggleDisplay(this)">Edit
+                                    </button>
+                                    <div><b th:utext="${field.name} + ' '" > </b><span th:if="${not #strings.isEmpty(field.textarea)}" th:text="${field.textarea}"></span></div>
+                                </div>
+                                <div style="display: none">
+                                    <textarea></textarea>
+                                    <button class="btn btn-primary btn-sm" th:id="${field.id}" text-area>Save</button>
+                                </div>
+                            </div>
+                            <div th:each="field : ${logic}">
+                                <div>
+                                    <button class="btn btn-primary btn-sm" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authentication.name == pageOwner}"
+                                            type="button" onclick="toggleDisplay(this)">Edit
+                                    </button>
+                                    <div ><b th:utext="${field.name} + ' '"> </b><span th:if="${not #strings.isEmpty(field.logic)}" th:text="${field.logic}"></span></div>
+                                </div>
+                                <div style="display: none">
+                                    <label>Yes</label>
+                                    <input type="radio" th:name="${field.name}" value="Yes">
+                                    <label>No</label>
+                                    <input type="radio" th:name="${field.name}" value="No">
+                                    <button class="btn btn-primary btn-sm" th:id="${field.id}" logic>Save</button>
+                                </div>
+                            </div>
+                            <div th:each="field : ${date}">
+                                <div>
+                                    <button class="btn btn-primary btn-sm" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authentication.name == pageOwner}"
+                                            type="button" onclick="toggleDisplay(this)">Edit
+                                    </button>
+                                    <div ><b th:utext="${field.name} + ' '"> </b><span th:if="${not #strings.isEmpty(field.date)}" th:text="${field.date}"></span></div>
+                                </div>
+                                <div style="display: none">
+                                    <input type="date" th:name="${field.name}">
+                                    <button class="btn btn-primary btn-sm" th:id="${field.id}">Save</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mt-2" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
+                <div class="col-5 bg-light rounded">
+                    <textarea id="comment-text" placeholder="Enter message" class="mt-2 form-control"></textarea>
+                    <div class="mt-1 mb-2">
+                        <button class="btn btn-primary" onclick="sendMsg(this)" lang="en">Send</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-2">
+                <div id="comments" class="comments col-5 bg-light rounded mt-2">
+                    <div class="text-center"><h5>Comments</h5></div>
+                    <div class="comment rounded mb-2 pl-2 pb-2 pt-2" th:each="comment : ${comments}" th:if="${comments}">
+                        <div th:utext="${'<b>From: </b>' + comment.fromUsername}"></div>
+                        <div th:utext="${'<b>Date: </b>' + comment.createdAt}"></div>
+                        <div th:utext="${comment.message}"></div>
+                        <div>
+                            <p><b>Likes: </b><span th:text="${#lists.size(comment.likes)}"></span></p>
+                            <button class="like btn btn-primary btn-sm" th:id="${comment.id}" onclick="addLikeToComment(this)" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
+                                <i class="fa-solid fa-thumbs-up"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </main>
+
+
+    <footer>
+
+    </footer>
+</section>
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/item.js}"></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title >Title</title>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css} "/>
+</head>
+
+<body>
+<section>
+    <header class="p-3 bg-dark text-white">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center justify-content-center">
+                <div>
+                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <li>
+                            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                                <input id="search" type="search" class="form-control form-control-dark" placeholder="Search..."
+                                       aria-label="Search">
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                <div class="text-end">
+                    <div>
+                        <span sec:authorize="hasRole('ADMIN')"><a href="/admin">admin</a></span>
+                        <a sec:authorize="isAuthenticated()" th:href="${'/' + #authentication.name}" th:text="${#authentication.name}"></a>
+                        <button sec:authorize="isAnonymous()" id="login" type="button" class="btn btn-outline-light me-2" onclick="redirect('/login')">Login</button>
+                        <button sec:authorize="isAuthenticated()" id="logout" type="button" class="btn btn-warning" onclick="redirect('/logout')">Logout</button>
+                        <button sec:authorize="isAnonymous()" id="sign-up" type="button" class="btn btn-warning" onclick="redirect('/sign-up')">Sign-up</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </header>
+    <main>
+        <div th:id="${collection.id}" th:each="collection : ${collections}" th:fragment="collections">
+            <a th:href="${collection.link}" th:text="${collection.name}"></a>
+        </div>
+    </main>
+    <footer></footer>
+</section>
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/search.js}"></script>
+</body>
+</html>

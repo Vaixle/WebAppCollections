@@ -1,0 +1,23 @@
+.gradient-custom-3 {
+    /* fallback for old browsers */
+    background: #84fab0;
+
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to right, #1172fd, #da12d5);
+
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, #1172fd, #da12d5);
+}
+
+.comment {
+    background-color: #d1e7ff;
+}
+
+.gradient-dark {
+    background: -webkit-linear-gradient(90deg, #656478, #944c67); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(90deg, #656478, #944c67); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.comment-dark {
+    background-color: #384e66;
+}
