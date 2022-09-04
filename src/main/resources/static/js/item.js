@@ -170,8 +170,14 @@ function render(message, from, createdAt, id, language ) {
 
     let commentTemplate
 
+    let styleClass = ""
+
+    if ($('#change-style').val() == "dark") {
+        styleClass = "comment-dark"
+    }
+
     if(language == "ru") {
-        commentTemplate =     '                <div class="comment comment rounded mb-2 pl-2 pb-2 pt-2">\n' +
+        commentTemplate =     '                <div class=' + "comment comment rounded mb-2 pl-2 pb-2 pt-2"+styleClass + '>\n' +
             '                <div><b>От: </b>' + from + '</div>\n' +
             '                <div><b>Дата: </b>' + createdAt + '</div>\n' +
             '                <div>' + message + '</div>\n' +
@@ -183,7 +189,7 @@ function render(message, from, createdAt, id, language ) {
             '                </div>\n'
 
     } else {
-        commentTemplate =     '                <div class="comment comment rounded mb-2 pl-2 pb-2 pt-2">\n' +
+        commentTemplate =     '                <div class=' + "comment comment rounded mb-2 pl-2 pb-2 pt-2"+styleClass + '>\n' +
             '                <div><b>From: </b>' + from + '</div>\n' +
             '                <div><b>Date: </b>' + createdAt + '</div>\n' +
             '                <div>' + message + '</div>\n' +
