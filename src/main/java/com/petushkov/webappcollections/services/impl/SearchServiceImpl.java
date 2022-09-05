@@ -26,9 +26,10 @@ public class SearchServiceImpl implements SearchService {
 
         changeStyleService.changeStyle(model, style, principal);
 
-        List<Collection> collections = hibernateSearchService.search(text, 1000, 0);
-
-        model.addAttribute("collections", collections);
+        if(text != null) {
+            List<Collection> collections = hibernateSearchService.search(text, 1000, 0);
+            model.addAttribute("collections", collections);
+        }
 
         return lang != null && lang.equals("ru") ? "search_ru": "search";
     }

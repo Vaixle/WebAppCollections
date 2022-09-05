@@ -23,7 +23,6 @@ import static com.petushkov.webappcollections.models.ERole.ROLE_ADMIN;
 
 @Controller
 @RequestMapping("/admin")
-@CrossOrigin("*")
 @AllArgsConstructor
 public class AdminWebController {
 
