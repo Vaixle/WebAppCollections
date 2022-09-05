@@ -19,7 +19,7 @@
                     <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                         <li>
                             <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                                <input id="search" type="search" class="form-control form-control-dark" placeholder="Search..."
+                                <input id="search" type="search" class="form-control form-control-dark" placeholder="Поиск..."
                                        aria-label="Search">
                             </form>
                         </li>
@@ -50,7 +50,7 @@
         <div class="row justify-content-center text-center mt-5">
 
             <div class="col-5 bg-light rounded">
-                <h3>Results</h3>
+                <h3>Результаты</h3>
                 <div th:id="${collection.id}" th:each="collection : ${collections}" th:fragment="collections">
                     <a th:href="${collection.link}" th:text="${collection.name}"></a>
                 </div>

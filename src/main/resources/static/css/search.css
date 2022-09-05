@@ -8,3 +8,8 @@
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     background: linear-gradient(to right, #1172fd, #da12d5);
 }
+
+.gradient-dark {
+    background: -webkit-linear-gradient(90deg, #656478, #944c67); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(90deg, #656478, #944c67); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
