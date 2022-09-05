@@ -47,23 +47,6 @@ public class SecurityConfig  {
 
     }
 
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//
-//        http.cors().disable()
-//                .csrf().disable()
-//                .authorizeRequests()
-//                .antMatchers("/**").access("permitAll")
-//                .antMatchers("/app-collections/**").access("permitAll")
-//                .antMatchers(HttpMethod.POST, "/api/**").permitAll()
-//                .and()
-//                .formLogin()
-//                .loginPage("/login")
-//                .failureHandler(customAuthenticationFailureHandler())
-//                .and()
-//                .logout();
-//    }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().disable()

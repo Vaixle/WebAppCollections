@@ -26,18 +26,6 @@ public class UserRestController {
         return userService.createUser(userDetailsDto, errors);
     }
 
-//    @DeleteMapping("{id}")
-//    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-//        userRepository.deleteById(id);
-//
-//        return ResponseEntity.ok().build();
-//    }
-//
-//    @GetMapping ("{id}")
-//    public ResponseEntity<?> findUser(@PathVariable Long id) {
-//        userRepository.findById(id);
-//
-//        return ResponseEntity.ok().build();
-//    }
+
 
 }
