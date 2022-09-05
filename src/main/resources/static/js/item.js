@@ -172,6 +172,8 @@ function render(message, from, createdAt, id, language ) {
 
     let styleClass = ""
 
+    let styleBtn = ""
+
     if ($('#change-style').val() == "dark") {
         styleClass = "comment-dark"
         styleBtn = "btn-info"
