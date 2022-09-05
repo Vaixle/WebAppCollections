@@ -26,8 +26,8 @@ public class SearchWebController {
     @GetMapping
     @ApiOperation(value = "Search page", notes = "Get search page")
     public String searchText(
-            @ApiParam(name = "text", value = "search text", example = "toys", required = true)
-            @RequestParam String text,
+            @ApiParam(name = "text", value = "search text", example = "toys", required = false)
+            @RequestParam(required = false) String text,
             Model model,
             @ApiParam(name = "lang", value = "Language for content", example = "en")
             @RequestParam(required = false) String lang,
