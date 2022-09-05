@@ -1,12 +1,10 @@
 package com.petushkov.webappcollections.controllers.web;
 
-import com.petushkov.webappcollections.models.Collection;
-import com.petushkov.webappcollections.services.impl.HibernateSearchServiceImpl;
+
 import com.petushkov.webappcollections.services.impl.SearchServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import java.security.Principal;
-import java.util.List;
 
+/**
+ * Processing requests for search page
+ */
 @Controller
 @RequestMapping("/search")
 @AllArgsConstructor

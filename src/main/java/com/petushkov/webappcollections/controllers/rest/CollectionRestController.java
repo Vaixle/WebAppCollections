@@ -1,8 +1,6 @@
 package com.petushkov.webappcollections.controllers.rest;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import com.petushkov.webappcollections.dto.CollectionDto;
 import com.petushkov.webappcollections.dto.FieldsCreateDto;
 import com.petushkov.webappcollections.dto.ItemDto;
@@ -14,15 +12,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+
 import java.util.*;
 
+
+/**
+ * Processing requests for collections
+ */
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/app-collections/collections")
@@ -31,6 +29,7 @@ import java.util.*;
 public class CollectionRestController {
 
     private CollectionServiceImpl collectionService;
+
 
     @PostMapping
     @ApiOperation(value = "Create collection", notes = "Create collection for specific user")

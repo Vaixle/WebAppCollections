@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Processing auth errors, if user send bad credentials
+ */
 public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
     @Override

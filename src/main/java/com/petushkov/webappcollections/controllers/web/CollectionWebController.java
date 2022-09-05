@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
-
+/**
+ * Processing requests for collection's page
+ */
 @Controller
 @AllArgsConstructor
 @SessionAttributes(value = {"lang", "style"})

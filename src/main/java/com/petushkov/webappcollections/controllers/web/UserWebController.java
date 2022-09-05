@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 
+/**
+ * Processing requests for user page
+ */
 @Controller
 @RequestMapping
 @AllArgsConstructor

@@ -9,6 +9,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Processing requests for creating item's fields
+ */
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/app-collections/fields-initialize")

@@ -11,7 +11,9 @@
 //import javax.servlet.http.HttpServletResponse;
 //import javax.servlet.http.HttpSession;
 //import java.io.IOException;
-//
+/**
+ * Processing if user passed authentication
+ */
 //public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 //
 //    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();

@@ -1,11 +1,6 @@
 package com.petushkov.webappcollections.controllers.web;
 
 import com.petushkov.webappcollections.dto.UserProfileDto;
-import com.petushkov.webappcollections.mappers.UserProfileMapper;
-import com.petushkov.webappcollections.models.ERole;
-import com.petushkov.webappcollections.models.Role;
-import com.petushkov.webappcollections.models.User;
-import com.petushkov.webappcollections.repositories.UserRepository;
 import com.petushkov.webappcollections.services.impl.AdminWebServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -17,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static com.petushkov.webappcollections.models.ERole.ROLE_ADMIN;
-
+/**
+ * Processing requests for admins
+ */
 @Controller
 @RequestMapping("/admin")
 @AllArgsConstructor

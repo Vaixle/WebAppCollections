@@ -1,10 +1,6 @@
 package com.petushkov.webappcollections.controllers.rest;
 
-import com.petushkov.webappcollections.dto.CollectionDto;
-import com.petushkov.webappcollections.models.Comment;
-import com.petushkov.webappcollections.models.Item;
-import com.petushkov.webappcollections.models.Like;
-import com.petushkov.webappcollections.repositories.CommentRepository;
+
 import com.petushkov.webappcollections.services.impl.CommentServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -13,10 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
+
+/**
+ * Processing requests for comments
+ */
 @AllArgsConstructor
 @RestController
 @CrossOrigin("*")

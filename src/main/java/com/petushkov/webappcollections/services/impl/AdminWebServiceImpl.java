@@ -16,6 +16,10 @@ import java.util.stream.Collectors;
 
 import static com.petushkov.webappcollections.models.ERole.ROLE_ADMIN;
 
+
+/**
+ * Service for admin requests
+ */
 @Service
 @AllArgsConstructor
 public class AdminWebServiceImpl implements AdminWebService {
@@ -24,11 +28,20 @@ public class AdminWebServiceImpl implements AdminWebService {
 
     private UserProfileMapper userProfileMapper;
 
+    /**
+     * Delete user
+     *
+     * @Param userProfileDtos - list of users
+     * @Param session - current session
+     * @Param principal - user's information
+     */
     @Override
     public void deleteUsers(List<UserProfileDto> userProfileDtos, HttpSession session, Principal principal) {
 
+        //find all users by id
         List<User> users = userRepository.findAllById(userProfileDtos.stream().map(u -> u.getId()).collect(Collectors.toList()));
 
+        //block current session
         users = users.stream()
                 .map(u -> {
                     u.setStatus("block");
@@ -38,10 +51,16 @@ public class AdminWebServiceImpl implements AdminWebService {
                 })
                 .collect(Collectors.toList());
 
+        //delete users
         userRepository.deleteAll(users);
 
     }
 
+    /**
+     * Find all users
+     *
+     * @return list of users dto
+     */
     @Override
     public List<UserProfileDto> getUsers() {
 
@@ -49,11 +68,20 @@ public class AdminWebServiceImpl implements AdminWebService {
 
     }
 
+    /**
+     * Block user
+     *
+     * @Param userProfileDtos - list of users
+     * @Param session - current session
+     * @Param principal - user's information
+     */
     @Override
     public void blockUsers(List<UserProfileDto> userProfileDtos, HttpSession session, Principal principal) {
 
+        //find all users by id
         List<User> users = userRepository.findAllById(userProfileDtos.stream().map(u -> u.getId()).collect(Collectors.toList()));
 
+        //change status to block and block current session
         users = users.stream()
                 .map(u -> {
                     u.setStatus("block");
@@ -63,14 +91,23 @@ public class AdminWebServiceImpl implements AdminWebService {
                 })
                 .collect(Collectors.toList());
 
+        //save users
         userRepository.saveAll(users);
     }
 
+
+    /**
+     * Unblock user
+     *
+     * @Param userProfileDtos - list of users
+     */
     @Override
     public void unblockUsers(List<UserProfileDto> userProfileDtos) {
 
+        //find all users by id
         List<User> users = userRepository.findAllById(userProfileDtos.stream().map(u -> u.getId()).collect(Collectors.toList()));
 
+        //change status to active
         users = users.stream()
                 .map(u -> {
                     u.setStatus("active");
@@ -78,14 +115,22 @@ public class AdminWebServiceImpl implements AdminWebService {
                 })
                 .collect(Collectors.toList());
 
+        //save users
         userRepository.saveAll(users);
     }
 
+    /**
+     * Add admin role
+     *
+     * @Param userProfileDtos - list of users
+     */
     @Override
     public void addAdminRole(List<UserProfileDto> userProfileDtos) {
 
+        //find all users by id
         List<User> users = userRepository.findAllById(userProfileDtos.stream().map(u -> u.getId()).collect(Collectors.toList()));
 
+        //add admin role
         users = users.stream()
                 .filter(u -> u.getRoles().size() <= 1)
                 .map(u-> {
@@ -94,14 +139,22 @@ public class AdminWebServiceImpl implements AdminWebService {
                 })
                 .collect(Collectors.toList());
 
+        //save users
         userRepository.saveAll(users);
     }
 
+    /**
+     * Remove admin role
+     *
+     * @Param userProfileDtos - list of users
+     */
     @Override
     public void removeAdminRole(List<UserProfileDto> userProfileDtos) {
 
+        //find all users by id
         List<User> users = userRepository.findAllById(userProfileDtos.stream().map(u -> u.getId()).collect(Collectors.toList()));
 
+        //add admin role
         users = users.stream()
                 .map(u-> {
                     u.getRoles().removeIf(r-> r.getName() == ROLE_ADMIN);
@@ -109,6 +162,7 @@ public class AdminWebServiceImpl implements AdminWebService {
                 })
                 .collect(Collectors.toList());
 
+        //save users
         userRepository.saveAll(users);
     }
 }

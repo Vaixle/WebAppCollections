@@ -16,7 +16,6 @@ import com.petushkov.webappcollections.repositories.ItemRepository;
 import com.petushkov.webappcollections.repositories.TagRepository;
 import com.petushkov.webappcollections.repositories.UserRepository;
 import com.petushkov.webappcollections.services.CollectionService;
-import lombok.AllArgsConstructor;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;;
@@ -34,6 +33,9 @@ import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Service with functions to processing collection requests
+ */
 @Service
 public class CollectionServiceImpl implements CollectionService {
 
@@ -58,6 +60,7 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Value("${cloudinary.api}")
     private String cloudinaryApi;
+
 
     public CollectionServiceImpl(CollectionRepository collectionRepository, UserRepository userRepository, ItemRepository itemRepository, TagRepository tagRepository, ChangeLanguageServiceImpl changeLanguageService, ChangeStyleServiceImpl changeStyleService, CollectionMapper collectionMapper, ItemMapper itemMapper, CollectionItemsFieldsMapper collectionItemsFieldsMapper) {
         this.collectionRepository = collectionRepository;

@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-
+/**
+ * Processing requests for users
+ */
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/app-collections/users")

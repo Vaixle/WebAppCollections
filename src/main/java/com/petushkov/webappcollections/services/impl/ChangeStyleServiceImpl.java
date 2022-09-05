@@ -9,20 +9,33 @@ import org.springframework.ui.Model;
 
 import java.security.Principal;
 
+/**
+ * Service with functions to processing change style
+ */
 @Service
 @AllArgsConstructor
 public class ChangeStyleServiceImpl implements ChangeStyleService {
 
     private UserRepository userRepository;
 
+    /**
+     * @param model
+     * @param style - value for style
+     * @param principal - user details
+     * @return language selected
+     */
     @Override
     public void changeStyle(Model model, String style, Principal principal) {
 
+        // If the style is selected and there are no changes, skip the block
         if(style != null && model.getAttribute("style") != style) {
+
+            //  If the user is authorized, check the value saved by the user
             if (principal != null) {
                 User user = userRepository.findByUsername(principal.getName()).get();
                 String userStyle = user.getStyle();
 
+                //  If the user has a saved value of the style and no changes, take it else add changes
                 if(userStyle != null && userStyle == style) {
                     style = userStyle;
                     model.addAttribute("style", style);
@@ -36,14 +49,13 @@ public class ChangeStyleServiceImpl implements ChangeStyleService {
 
         }
 
+        //take selected style
         if(principal != null) {
             User user = userRepository.findByUsername(principal.getName()).get();
             String userStyle = user.getStyle();
             model.addAttribute("style", userStyle);
         }
 
-//        return  model.getAttribute("lang") != null  ?
-//                model.getAttribute("lang").toString() : style;
 
     }
 

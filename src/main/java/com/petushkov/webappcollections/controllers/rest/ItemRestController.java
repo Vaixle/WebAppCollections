@@ -1,6 +1,6 @@
 package com.petushkov.webappcollections.controllers.rest;
 
-import com.petushkov.webappcollections.dto.ItemFieldValueDto;
+
 import com.petushkov.webappcollections.services.impl.ItemServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
+/**
+ * Processing requests for items
+ */
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/app-collections/items")

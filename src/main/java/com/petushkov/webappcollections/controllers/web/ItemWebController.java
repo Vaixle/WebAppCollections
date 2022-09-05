@@ -1,23 +1,19 @@
 package com.petushkov.webappcollections.controllers.web;
 
-import com.petushkov.webappcollections.models.FieldInitialize;
-import com.petushkov.webappcollections.models.Item;
-import com.petushkov.webappcollections.repositories.CollectionRepository;
-import com.petushkov.webappcollections.repositories.ItemRepository;
+
 import com.petushkov.webappcollections.services.impl.ItemServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
-import org.jboss.jandex.FieldInfo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * Processing requests for item's page
+ */
 @Controller
 @AllArgsConstructor
 @SessionAttributes(value = {"lang", "style"})
