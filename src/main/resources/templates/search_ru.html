@@ -37,9 +37,9 @@
                         </select>
                         <span sec:authorize="hasRole('ADMIN')"><a href="/admin">admin</a></span>
                         <a sec:authorize="isAuthenticated()" th:href="${'/' + #authentication.name}" th:text="${#authentication.name}"></a>
-                        <button sec:authorize="isAnonymous()" id="login" type="button" class="btn btn-outline-light me-2" onclick="redirect('/login')">Login</button>
-                        <button sec:authorize="isAuthenticated()" id="logout" type="button" class="btn btn-warning" onclick="redirect('/logout')">Logout</button>
-                        <button sec:authorize="isAnonymous()" id="sign-up" type="button" class="btn btn-warning" onclick="redirect('/sign-up')">Sign-up</button>
+                        <button sec:authorize="isAnonymous()" id="login" type="button" class="btn btn-primary" onclick="redirect('/login')">Login</button>
+                        <button sec:authorize="isAuthenticated()" id="logout" type="button" class="btn btn-primary" onclick="redirect('/logout')">Logout</button>
+                        <button sec:authorize="isAnonymous()" id="sign-up" type="button" class="btn btn-primary" onclick="redirect('/sign-up')">Sign-up</button>
                     </div>
                 </div>
             </div>
