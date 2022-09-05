@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -27,8 +28,13 @@ public class SearchWebController {
     public String searchText(
             @ApiParam(name = "text", value = "search text", example = "toys", required = true)
             @RequestParam String text,
-            Model model) {
+            Model model,
+            @ApiParam(name = "lang", value = "Language for content", example = "en")
+            @RequestParam(required = false) String lang,
+            @ApiParam(name = "style", value = "Style for content", example = "dark")
+            @RequestParam(required = false) String style,
+            Principal principal) {
 
-        return searchService.searchText(text, model);
+        return searchService.searchText(text, model, lang, style,  principal);
     }
 }

@@ -19,17 +19,17 @@ import java.util.List;
 @AllArgsConstructor
 public class MainPageServiceImpl implements MainPageService {
 
-    CollectionRepository collectionRepository;
+    private CollectionRepository collectionRepository;
 
-    ItemRepository itemRepository;
+    private ItemRepository itemRepository;
 
-    CollectionMapper collectionMapper;
+    private CollectionMapper collectionMapper;
 
-    TagRepository tagRepository;
+    private TagRepository tagRepository;
 
-    ChangeLanguageServiceImpl changeLanguage;
+    private ChangeLanguageServiceImpl changeLanguage;
 
-    ChangeStyleServiceImpl changeStyleService;
+    private ChangeStyleServiceImpl changeStyleService;
 
 
     @Override
