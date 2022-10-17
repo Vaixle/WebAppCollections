@@ -25,8 +25,6 @@ public class ItemServiceImpl implements ItemService {
 
     private ItemRepository itemRepository;
 
-    private ChangeLanguageServiceImpl changeLanguageService;
-
     private ChangeStyleServiceImpl changeStyleService;
 
     @Override
@@ -37,10 +35,10 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public String getItemPage(String username, Long id, Model model, String lang, String style, Principal principal) {
+    public String getItemPage(String username, Long id, Model model, String style, Principal principal) {
 
         Item item = itemRepository.findById(id).get();
-        lang = changeLanguageService.changeLanguage(model, lang, principal);
+
         changeStyleService.changeStyle(model, style, principal);
 
         List<FieldInitialize> fieldInitializeNumber = new ArrayList<>();
@@ -83,7 +81,7 @@ public class ItemServiceImpl implements ItemService {
         model.addAttribute("likes", item.getLikes().size());
         model.addAttribute("comments", item.getComments());
 
-        return lang != null && lang.equals("ru") ? "item_ru": "item";
+        return "item";
     }
 
     @Override

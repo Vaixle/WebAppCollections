@@ -30,13 +30,11 @@ public class CollectionWebController {
             @ApiParam(name = "collectionName", value = "name of specific collection", example = "r2", required = true)
             @PathVariable String collectionName,
             Model model,
-            @ApiParam(name = "lang", value = "Language for content", example = "en")
-            @RequestParam(required = false) String lang,
             @ApiParam(name = "style", value = "Style for content", example = "dark")
             @RequestParam(required = false) String style,
             Principal principal) {
 
-        return collectionService.getCollectionPage(username, collectionName, model, lang, style, principal);
+        return collectionService.getCollectionPage(username, collectionName, model, style, principal);
     }
 
 }

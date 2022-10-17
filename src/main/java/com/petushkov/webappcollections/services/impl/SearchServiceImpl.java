@@ -15,14 +15,11 @@ public class SearchServiceImpl implements SearchService {
 
     private HibernateSearchServiceImpl hibernateSearchService;
 
-    private  ChangeLanguageServiceImpl changeLanguage;
-
     private ChangeStyleServiceImpl changeStyleService;
 
     @Override
-    public String searchText(String text, Model model, String lang, String style,  Principal principal) {
+    public String searchText(String text, Model model, String style,  Principal principal) {
 
-        lang = changeLanguage.changeLanguage(model, lang, principal);
 
         changeStyleService.changeStyle(model, style, principal);
 
@@ -31,6 +28,6 @@ public class SearchServiceImpl implements SearchService {
             model.addAttribute("collections", collections);
         }
 
-        return lang != null && lang.equals("ru") ? "search_ru": "search";
+        return "search";
     }
 }

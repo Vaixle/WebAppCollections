@@ -49,6 +49,8 @@ public class Item {
     @IndexedEmbedded
     private Set<Tag> tags = new HashSet<>();
 
+
+
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH,
                     CascadeType.MERGE,

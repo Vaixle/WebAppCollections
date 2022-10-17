@@ -28,13 +28,11 @@ public class UserWebController {
             @ApiParam(name = "username", value = "username of specific user", example = "ivan", required = true)
             @PathVariable String username,
             Model model,
-            @ApiParam(name = "lang", value = "Language for content", example = "en")
-            @RequestParam(required = false) String lang,
             @ApiParam(name = "style", value = "Style for content", example = "dark")
             @RequestParam(required = false) String style,
             Principal principal) {
 
-        return userService.getUserPage(username, model, lang, style, principal);
+        return userService.getUserPage(username, model, style, principal);
     }
 
 }

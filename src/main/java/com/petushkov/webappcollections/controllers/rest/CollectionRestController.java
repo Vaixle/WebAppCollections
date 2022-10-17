@@ -22,8 +22,7 @@ import java.util.*;
  * Processing requests for collections
  */
 @RestController
-@CrossOrigin("*")
-@RequestMapping("/api/app-collections/collections")
+@RequestMapping("/api/collections")
 @AllArgsConstructor
 @SessionAttributes(value = {"lang", "style"})
 public class CollectionRestController {
@@ -94,6 +93,13 @@ public class CollectionRestController {
             @PathVariable Long id) {
 
         return collectionService.deleteCollection(id);
+    }
+
+    @GetMapping("/top-collections")
+    @ApiOperation(value = "Get top 5 collections", notes = "Get top 5 collections")
+    public ResponseEntity<?> getTop5Collections() {
+
+        return collectionService.getTop5Collections();
     }
 
 }

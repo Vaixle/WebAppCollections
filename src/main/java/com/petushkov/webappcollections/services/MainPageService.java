@@ -6,5 +6,5 @@ import java.security.Principal;
 
 public interface MainPageService {
 
-    String getMainPage(Model model, String lang, String style, Principal principal);
+    String getMainPage(Model model, Principal principal);
 }

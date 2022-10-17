@@ -31,12 +31,10 @@ public class SearchWebController {
             @ApiParam(name = "text", value = "search text", example = "toys", required = false)
             @RequestParam(required = false) String text,
             Model model,
-            @ApiParam(name = "lang", value = "Language for content", example = "en")
-            @RequestParam(required = false) String lang,
             @ApiParam(name = "style", value = "Style for content", example = "dark")
             @RequestParam(required = false) String style,
             Principal principal) {
 
-        return searchService.searchText(text, model, lang, style,  principal);
+        return searchService.searchText(text, model, style,  principal);
     }
 }

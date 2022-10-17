@@ -48,8 +48,6 @@ public class CollectionServiceImpl implements CollectionService {
 
     private TagRepository tagRepository;
 
-    private ChangeLanguageServiceImpl changeLanguageService;
-
     private ChangeStyleServiceImpl changeStyleService;
 
     private CollectionMapper collectionMapper;
@@ -62,12 +60,11 @@ public class CollectionServiceImpl implements CollectionService {
     private String cloudinaryApi;
 
 
-    public CollectionServiceImpl(CollectionRepository collectionRepository, UserRepository userRepository, ItemRepository itemRepository, TagRepository tagRepository, ChangeLanguageServiceImpl changeLanguageService, ChangeStyleServiceImpl changeStyleService, CollectionMapper collectionMapper, ItemMapper itemMapper, CollectionItemsFieldsMapper collectionItemsFieldsMapper) {
+    public CollectionServiceImpl(CollectionRepository collectionRepository, UserRepository userRepository, ItemRepository itemRepository, TagRepository tagRepository, ChangeStyleServiceImpl changeStyleService, CollectionMapper collectionMapper, ItemMapper itemMapper, CollectionItemsFieldsMapper collectionItemsFieldsMapper) {
         this.collectionRepository = collectionRepository;
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
         this.tagRepository = tagRepository;
-        this.changeLanguageService = changeLanguageService;
         this.changeStyleService = changeStyleService;
         this.collectionMapper = collectionMapper;
         this.itemMapper = itemMapper;
@@ -116,6 +113,13 @@ public class CollectionServiceImpl implements CollectionService {
         collectionDto.setDescription(markdownToHTML(collectionDto.getDescription()));
 
         return new ResponseEntity<>(collectionDto, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> getTop5Collections() {
+        return ResponseEntity
+                .ok()
+                .body(collectionMapper.entitiesToDtos(collectionRepository.findTop5CollectionOrderByItemsDesc()));
     }
 
     @Override
@@ -231,12 +235,9 @@ public class CollectionServiceImpl implements CollectionService {
 
         List<CollectionDto> collectionDtos = collectionMapper.entitiesToDtos(collections);
 
-        if (model.getAttribute("lang") != null &&
-                model.getAttribute("lang").toString().equals("ru")) {
-            mv = new ModelAndView("user_ru::collections");
-        } else {
-            mv = new ModelAndView("user::collections");
-        }
+
+        mv = new ModelAndView("user::collections");
+
 
         mv.addObject("collections", collectionDtos);
         mv.addObject("username", username.get());
@@ -253,9 +254,8 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public String getCollectionPage(String username, String collectionName, Model model, String lang, String style, Principal principal) {
+    public String getCollectionPage(String username, String collectionName, Model model, String style, Principal principal) {
 
-        lang = changeLanguageService.changeLanguage(model, lang, principal);
         changeStyleService.changeStyle(model, style, principal);
 
 
@@ -267,12 +267,9 @@ public class CollectionServiceImpl implements CollectionService {
 
         }
 
-        if (model.getAttribute("lang") != null &&
-                model.getAttribute("lang").toString().equals("ru")) {
-            model.addAttribute("collection_ru::description", collectionFullinfDto.getDescription());
-        } else {
-            model.addAttribute("collection::description", collectionFullinfDto.getDescription());
-        }
+
+        model.addAttribute("collection::description", collectionFullinfDto.getDescription());
+
 
 
         declareFields(collectionFullinfDto, model);
@@ -280,7 +277,7 @@ public class CollectionServiceImpl implements CollectionService {
         model.addAttribute("pageOwner", username);
 
 
-        return lang != null && lang.equals("ru") ? "collection_ru" : "collection";
+        return "collection";
     }
 
 
@@ -371,5 +368,7 @@ public class CollectionServiceImpl implements CollectionService {
         }
 
     }
+
+
 
 }

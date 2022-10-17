@@ -6,11 +6,13 @@ import com.petushkov.webappcollections.mappers.UserDetailsMapper;
 import com.petushkov.webappcollections.models.ERole;
 import com.petushkov.webappcollections.models.Role;
 import com.petushkov.webappcollections.models.User;
+import com.petushkov.webappcollections.models.impl.UserDetailsImpl;
 import com.petushkov.webappcollections.repositories.UserRepository;
 import com.petushkov.webappcollections.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -28,15 +30,13 @@ public class UserServiceImpl implements UserService {
 
     private UserDetailsMapper userDetailsMapper;
 
-    private ChangeLanguageServiceImpl changeLanguageService;
+    private ChangeStyleServiceImpl changeStyleService;
 
-    ChangeStyleServiceImpl changeStyleService;
+    private RefreshTokenServiceImpl refreshTokenService;
 
     @Override
-    public ResponseEntity<?> createUser(UserDetailsDto userDetailsDto, Errors errors) {
+    public ResponseEntity<?> createUser(UserDetailsDto userDetailsDto) {
 
-        if(errors.hasErrors())
-            return ResponseEntity.badRequest().body(errors.getAllErrors());
 
         if (userRepository.existsByUsername(userDetailsDto.getUsername()))
             return ResponseEntity.badRequest().body(new MessageResponseDto("Username is already taken!"));
@@ -55,14 +55,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getUserPage(String username, Model model, String lang, String style, Principal principal) {
+    public ResponseEntity<?> signOut(Long id ) {
 
-        lang = changeLanguageService.changeLanguage(model, lang, principal);
+        refreshTokenService.deleteAllByUserId(id);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @Override
+    public String getUserPage(String username, Model model, String style, Principal principal) {
 
         changeStyleService.changeStyle(model, style, principal);
 
         model.addAttribute("pageOwner", username);
 
-        return lang != null && lang.equals("ru") ? "user_ru": "user";
+        return "user";
     }
 }

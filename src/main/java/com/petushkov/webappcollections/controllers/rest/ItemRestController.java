@@ -5,6 +5,8 @@ import com.petushkov.webappcollections.services.impl.ItemServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

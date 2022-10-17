@@ -77,19 +77,21 @@ function changeStyle(e) {
 
     let actionUrl = window.document.location.origin
 
-    $.ajax({
-        type: "GET",
-        data:{"style" : valueSelected},
-        url: actionUrl,
-    });
+    window.location.replace(actionUrl + "?theme=" +valueSelected)
 
-    $('body').toggleClass('gradient-dark')
-
-    $('button').toggleClass('btn-info')
-
-    $('div.bg-light').toggleClass('bg-dark')
-
-    $('div.bg-light').toggleClass('text-white')
+    // $.ajax({
+    //     type: "GET",
+    //     data:{"style" : valueSelected},
+    //     url: actionUrl,
+    // });
+    //
+    // $('body').toggleClass('gradient-dark')
+    //
+    // $('button').toggleClass('btn-info')
+    //
+    // $('div.bg-light').toggleClass('bg-dark')
+    //
+    // $('div.bg-light').toggleClass('text-white')
 
 }
 

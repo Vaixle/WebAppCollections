@@ -9,8 +9,10 @@ import java.security.Principal;
 
 public interface UserService {
 
-    ResponseEntity<?> createUser(UserDetailsDto userDetailsDto, Errors errors);
+    ResponseEntity<?> createUser(UserDetailsDto userDetailsDto);
 
-    String getUserPage(String username, Model model, String lang, String style, Principal principal);
+    String getUserPage(String username, Model model, String style, Principal principal);
+
+    ResponseEntity<?> signOut(Long id );
 
 }

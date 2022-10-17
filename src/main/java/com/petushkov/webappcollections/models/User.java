@@ -66,6 +66,10 @@ public class User {
         this.email = email;
     }
 
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    RefreshToken refreshToken;
+
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH,
                     CascadeType.MERGE,

@@ -27,17 +27,12 @@ public class MainPageServiceImpl implements MainPageService {
 
     private TagRepository tagRepository;
 
-    private ChangeLanguageServiceImpl changeLanguage;
-
     private ChangeStyleServiceImpl changeStyleService;
 
 
     @Override
-    public String getMainPage(Model model, String lang, String style,  Principal principal) {
+    public String getMainPage(Model model,  Principal principal) {
 
-        lang = changeLanguage.changeLanguage(model, lang, principal);
-
-        changeStyleService.changeStyle(model, style, principal);
 
         List<Collection> collections = collectionRepository.findTop5CollectionOrderByItemsDesc();
 
@@ -51,6 +46,6 @@ public class MainPageServiceImpl implements MainPageService {
 
         model.addAttribute("tags", tags);
 
-        return lang != null && lang.equals("ru") ? "main_ru": "main";
+        return "main";
     }
 }

@@ -19,12 +19,14 @@ public interface CollectionService {
 
     ResponseEntity<?> createItem(Long id, ItemDto itemDto);
 
+    ResponseEntity<?> getTop5Collections();
+
     ResponseEntity<?> setCollectionFields(Long id, FieldsCreateDto fieldsCreateDto);
 
     ModelAndView findAllCollections(Optional<Long> id, Optional<String> username, Model model);
 
     ResponseEntity<?> deleteCollection(Long id);
 
-    String getCollectionPage(String username, String collectionName, Model model,String lang, String style, Principal principal);
+    String getCollectionPage(String username, String collectionName, Model model, String style, Principal principal);
 
 }
