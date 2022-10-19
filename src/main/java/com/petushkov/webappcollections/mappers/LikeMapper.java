@@ -1,7 +1,7 @@
 package com.petushkov.webappcollections.mappers;
 
+import com.petushkov.webappcollections.dto.LikeDto;
 import com.petushkov.webappcollections.models.Like;
-import com.petushkov.webappcollections.models.LikeDto;
 import org.mapstruct.*;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")

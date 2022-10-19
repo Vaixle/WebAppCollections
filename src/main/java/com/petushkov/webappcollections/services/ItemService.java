@@ -13,4 +13,6 @@ public interface ItemService {
 
     ResponseEntity<?> likeItem(Long id, Principal principal);
 
+    ResponseEntity<?> findTop5ByOrderByCreatedAtDesc();
+
 }

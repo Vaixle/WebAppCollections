@@ -1,5 +1,8 @@
 package com.petushkov.webappcollections.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -13,6 +16,9 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Like {
 
     @Id
@@ -36,6 +42,7 @@ public class Like {
     @JoinColumn(name = "item_id")
     @ToString.Exclude
     @ApiModelProperty(notes = "the object of the like owner, like an owner can be an item", example = "item1")
+    @JsonBackReference
     private Item item;
 
     @ManyToOne(fetch = FetchType.LAZY,
@@ -49,16 +56,4 @@ public class Like {
     @ApiModelProperty(notes = "the object of the like owner, like an owner can be an comment", example = "comment1")
     private Comment comment;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Like like = (Like) o;
-        return id != null && Objects.equals(id, like.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }

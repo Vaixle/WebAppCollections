@@ -1,5 +1,9 @@
 package com.petushkov.webappcollections.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -16,6 +20,9 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Entity
 @Table(name = "tags")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Tag {
 
     @Id
@@ -27,21 +34,11 @@ public class Tag {
     @ApiModelProperty(notes = "name of tag", example = "#records")
     private String name;
 
+
     @ManyToMany(mappedBy = "tags")
     @ToString.Exclude
     @ApiModelProperty(notes = "set of owners, owners are items", example = "item1, item2")
+    @JsonBackReference
     private Set<Item> items = new HashSet<>();
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Tag tag = (Tag) o;
-        return name != null && Objects.equals(name, tag.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }

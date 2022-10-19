@@ -1,5 +1,8 @@
 package com.petushkov.webappcollections.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -13,6 +16,9 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Table(name = "fields")
 @Entity
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Field {
 
     @Id
@@ -34,6 +40,7 @@ public class Field {
     @JoinColumn(name = "collection_id")
     @ToString.Exclude
     @ApiModelProperty(notes = "object of field owner, field owner is collection", example = "collection1")
+    @JsonBackReference
     private Collection collection;
 
     public Field(String name, String type) {

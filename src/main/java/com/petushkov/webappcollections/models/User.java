@@ -1,5 +1,8 @@
 package com.petushkov.webappcollections.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -20,6 +23,9 @@ import java.util.*;
                 @UniqueConstraint(columnNames = "username"),
                 @UniqueConstraint(columnNames = "email")
         })
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class User {
 
     @Id
@@ -85,6 +91,7 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     @ToString.Exclude
     @ApiModelProperty(notes = "set of user collections", example = "my books, my records")
+    @JsonManagedReference
     private Set<Collection> collections = new HashSet<>();
 
     public void addRole(Role role) {

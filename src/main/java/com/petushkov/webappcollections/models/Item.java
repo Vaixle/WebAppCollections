@@ -1,5 +1,9 @@
 package com.petushkov.webappcollections.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -47,9 +51,8 @@ public class Item {
     joinColumns = @JoinColumn(name = "item_id"),
     inverseJoinColumns = @JoinColumn(name = "tag_id"))
     @IndexedEmbedded
+    @ToString.Exclude
     private Set<Tag> tags = new HashSet<>();
-
-
 
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH,
@@ -79,19 +82,6 @@ public class Item {
 
     public void addLike(Like like) {
         likes.add(like);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Item item = (Item) o;
-        return id != null && Objects.equals(id, item.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
     }
 
     @PrePersist
