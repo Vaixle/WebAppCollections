@@ -1,22 +1,19 @@
 package com.petushkov.webappcollections.services.impl;
 
 import com.petushkov.webappcollections.dto.MessageResponseDto;
-import com.petushkov.webappcollections.dto.UserDetailsDto;
-import com.petushkov.webappcollections.mappers.UserDetailsMapper;
+import com.petushkov.webappcollections.dto.UserDto;
+import com.petushkov.webappcollections.mappers.UserMapper;
 import com.petushkov.webappcollections.models.ERole;
 import com.petushkov.webappcollections.models.Role;
 import com.petushkov.webappcollections.models.User;
-import com.petushkov.webappcollections.models.impl.UserDetailsImpl;
 import com.petushkov.webappcollections.repositories.UserRepository;
 import com.petushkov.webappcollections.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
 
 import java.security.Principal;
 
@@ -28,14 +25,14 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
-    private UserDetailsMapper userDetailsMapper;
+    private UserMapper userMapper;
 
     private ChangeStyleServiceImpl changeStyleService;
 
     private RefreshTokenServiceImpl refreshTokenService;
 
     @Override
-    public ResponseEntity<?> createUser(UserDetailsDto userDetailsDto) {
+    public ResponseEntity<?> createUser(UserDto userDetailsDto) {
 
 
         if (userRepository.existsByUsername(userDetailsDto.getUsername()))
@@ -46,7 +43,7 @@ public class UserServiceImpl implements UserService {
             return ResponseEntity.badRequest().body(new MessageResponseDto("Email is already in use!"));
 
 
-        User user = userDetailsMapper.DtoToEntity(userDetailsDto);
+        User user = userMapper.userDtoToUser(userDetailsDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.addRole(new Role(ERole.ROLE_USER));
         userRepository.save(user);

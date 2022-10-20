@@ -1,7 +1,6 @@
 package com.petushkov.webappcollections.services.impl;
 
 import com.petushkov.webappcollections.dto.ItemDto;
-import com.petushkov.webappcollections.dto.ItemFieldValueDto;
 import com.petushkov.webappcollections.mappers.ItemMapper;
 import com.petushkov.webappcollections.models.FieldInitialize;
 import com.petushkov.webappcollections.models.Item;
@@ -111,7 +110,7 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public ResponseEntity<?> findTop5ByOrderByCreatedAtDesc() {
         List<Item> items = itemRepository.findTop5ByOrderByCreatedAtDesc();
-        List<ItemDto> itemDtos = itemMapper.entitiesToDtos(items);
+        List<ItemDto> itemDtos = itemMapper.itemsToItemDtos(items);
         System.out.println(itemDtos);
         System.out.println(itemDtos);
         return new ResponseEntity<>(itemDtos, HttpStatus.OK);

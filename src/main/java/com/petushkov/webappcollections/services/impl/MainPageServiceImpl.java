@@ -36,7 +36,7 @@ public class MainPageServiceImpl implements MainPageService {
 
         List<Collection> collections = collectionRepository.findTop5CollectionOrderByItemsDesc();
 
-        model.addAttribute("collections", collectionMapper.entitiesToDtos(collections));
+        model.addAttribute("collections", collectionMapper.collectionsToCollectionDtos(collections));
 
         List<Item> items = itemRepository.findTop5ByOrderByCreatedAtDesc();
 

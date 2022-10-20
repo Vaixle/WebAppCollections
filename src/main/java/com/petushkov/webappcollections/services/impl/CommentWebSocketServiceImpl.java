@@ -12,9 +12,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
-import javax.transaction.Transactional;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -35,20 +33,20 @@ public class CommentWebSocketServiceImpl implements CommentWebSocketService {
     @MessageMapping("/comments/{to}")
     public void sendMessage(@DestinationVariable String to, CommentDto commentDto, Principal principal) {
 
-        commentDto.setFromUsername(principal.getName());
-        commentDto.setToUsername(to);
+//        commentDto.se(principal.getName());
+//        commentDto.setToUsername(to);
 
         System.out.println("Handling message: " + commentDto + " to: " + to );
 
-        Item item = itemRepository.findById(commentDto.getItemId()).get();
+//        Item item = itemRepository.findById(commentDto.getItemId()).get();
 
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm:ss");
-        commentDto.setCreatedAt(LocalDateTime.parse( commentDto.getCreatedAt(), formatter ).toString() );
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm:ss");
+//        commentDto.setCreatedAt(LocalDateTime.parse( commentDto.getCreatedAt(), formatter ).toString() );
 
-        Comment comment = commentMapper.DtoToEntity(commentDto);
+        Comment comment = commentMapper.commentDtoToComment(commentDto);
 
-        comment.setItem(item);
+//        comment.setItem(item);
 
         commentRepository.save(comment);
 
@@ -56,7 +54,7 @@ public class CommentWebSocketServiceImpl implements CommentWebSocketService {
 
         commentRepository.flush();
 
-        commentDto.setId(comment.getId());
+//        commentDto.setId(comment.getId());
 
         simpMessagingTemplate.convertAndSend("/topic/messages/" + to , commentDto);
 

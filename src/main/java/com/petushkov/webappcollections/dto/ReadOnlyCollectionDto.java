@@ -7,12 +7,9 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-/**
- * A DTO for the {@link com.petushkov.webappcollections.models.Collection} entity
- */
 @AllArgsConstructor
 @Getter
-public class CollectionDto implements Serializable {
+public class ReadOnlyCollectionDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,5 +22,4 @@ public class CollectionDto implements Serializable {
     private final String link;
     private final String imgLink;
     private final ReadOnlyUserDto user;
-    private final List<ItemDto> items;
 }

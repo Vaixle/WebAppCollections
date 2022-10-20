@@ -1,7 +1,7 @@
 package com.petushkov.webappcollections.controllers.rest;
 
 import com.petushkov.webappcollections.config.JwtUtils;
-import com.petushkov.webappcollections.dto.UserDetailsDto;
+import com.petushkov.webappcollections.dto.UserDto;
 import com.petushkov.webappcollections.exceptions.TokenRefreshException;
 import com.petushkov.webappcollections.models.RefreshToken;
 import com.petushkov.webappcollections.models.impl.UserDetailsImpl;
@@ -20,7 +20,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -96,7 +95,7 @@ public class AuthRestController {
 
     @ApiOperation(value = "Create user", notes = "Registering a specified user")
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserDetailsDto userDetailsDto) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserDto userDetailsDto) {
 
         return userService.createUser(userDetailsDto);
 

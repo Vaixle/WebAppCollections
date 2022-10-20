@@ -21,20 +21,20 @@ public class CollectionWebController {
 
     private CollectionServiceImpl collectionService;
 
-    @GetMapping("/{username:^(?:(?!login|sign-up|favicon\\.ico|js|css).)*$}/collections/{collectionName}")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Collection page", notes = "Get collection page")
-    public String getCollectionPage(
-            @ApiParam(name = "username", value = "username of specific user", example = "ivan", required = true)
-            @PathVariable String username,
-            @ApiParam(name = "collectionName", value = "name of specific collection", example = "r2", required = true)
-            @PathVariable String collectionName,
-            Model model,
-            @ApiParam(name = "style", value = "Style for content", example = "dark")
-            @RequestParam(required = false) String style,
-            Principal principal) {
-
-        return collectionService.getCollectionPage(username, collectionName, model, style, principal);
-    }
+//    @GetMapping("/{username:^(?:(?!login|sign-up|favicon\\.ico|js|css).)*$}/collections/{collectionName}")
+//    @ResponseStatus(HttpStatus.OK)
+//    @ApiOperation(value = "Collection page", notes = "Get collection page")
+//    public String getCollectionPage(
+//            @ApiParam(name = "username", value = "username of specific user", example = "ivan", required = true)
+//            @PathVariable String username,
+//            @ApiParam(name = "collectionName", value = "name of specific collection", example = "r2", required = true)
+//            @PathVariable String collectionName,
+//            Model model,
+//            @ApiParam(name = "style", value = "Style for content", example = "dark")
+//            @RequestParam(required = false) String style,
+//            Principal principal) {
+//
+//        return collectionService.getCollectionPage(username, collectionName, model, style, principal);
+//    }
 
 }

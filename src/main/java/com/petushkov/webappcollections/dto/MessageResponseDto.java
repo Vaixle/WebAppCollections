@@ -1,12 +1,12 @@
 package com.petushkov.webappcollections.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-@Data
-@AllArgsConstructor
-public class MessageResponseDto {
-
-        private String message;
-
+@RequiredArgsConstructor
+@Getter
+@Setter
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class MessageResponseDto  {
+    @NonNull String message;
 }

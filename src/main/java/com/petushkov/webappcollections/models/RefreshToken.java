@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
@@ -12,7 +13,9 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
-public class RefreshToken {
+public class RefreshToken implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     private Long id;

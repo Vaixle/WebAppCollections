@@ -4,18 +4,23 @@ import com.petushkov.webappcollections.dto.CollectionDto;
 import com.petushkov.webappcollections.dto.ItemDto;
 import com.petushkov.webappcollections.models.Collection;
 import com.petushkov.webappcollections.models.Item;
-import org.mapstruct.Mapper;
+import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        componentModel = "spring",
+        uses = {ReadOnlyCollectionMapper.class},
+        injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface ItemMapper {
+    Item itemDtoToItem(ItemDto itemDto);
 
-    ItemDto entityToDto(Item item);
+    ItemDto itemToItemDto(Item item);
 
-    Item DtoToEntity(ItemDto itemDto);
+    List<Item> itemDtosToItems(List<ItemDto> ItemDtos);
 
-    List<ItemDto> entitiesToDtos(List<Item> items);
+    List<ItemDto> itemsToItemDtos(List<Item> items);
 
-    List<Item> DtosToEntities(List<ItemDto> ItemDtos);
+
 }
