@@ -1,21 +1,24 @@
 package com.petushkov.webappcollections.mappers;
 
 import com.petushkov.webappcollections.dto.CollectionDto;
-import com.petushkov.webappcollections.dto.UserDetailsDto;
 import com.petushkov.webappcollections.models.Collection;
-import com.petushkov.webappcollections.models.User;
-import org.mapstruct.Mapper;
+import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        componentModel = "spring",
+        uses = {ItemMapper.class,
+        ReadOnlyUserMapper.class},
+        injectionStrategy = InjectionStrategy.CONSTRUCTOR
+)
 public interface CollectionMapper {
+    Collection collectionDtoToCollection(CollectionDto collectionDto);
 
-    CollectionDto entityToDto(Collection collection);
+    CollectionDto collectionToCollectionDto(Collection collection);
 
-    Collection DtoToEntity(CollectionDto collectionDto);
+    List<Collection> collectionDtosToCollections(List<CollectionDto> collectionDto);
 
-    List<CollectionDto> entitiesToDtos(List<Collection> collections);
+    List<CollectionDto> collectionsToCollectionDtos(List<Collection> collection);
 
-    List<Collection> DtosToEntities(List<CollectionDto> collectionDtos);
 }

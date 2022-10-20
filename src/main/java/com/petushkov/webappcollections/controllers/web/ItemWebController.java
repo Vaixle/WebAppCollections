@@ -29,13 +29,11 @@ public class ItemWebController {
             @ApiParam(name = "id", value = "id of specific user", example = "1", required = true)
             @PathVariable Long id,
             Model model,
-            @ApiParam(name = "lang", value = "Language for content", example = "en")
-            @RequestParam(required = false) String lang,
             @ApiParam(name = "style", value = "Style for content", example = "dark")
             @RequestParam(required = false) String style,
             Principal principal) {
 
-        return itemService.getItemPage(username, id, model, lang, style, principal);
+        return itemService.getItemPage(username, id, model, style, principal);
 
     }
 

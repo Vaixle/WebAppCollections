@@ -38,3 +38,12 @@ function checkValidation(message) {
     $passwordFeedBack.text(message)
 
 }
+
+$('#lang').on('change', function (e) {
+
+    let valueSelected = this.value;
+
+    let actionUrl = window.document.location.origin + window.document.location.pathname
+
+    window.location.replace(actionUrl + "?lang=" + valueSelected)
+});

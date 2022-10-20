@@ -1,21 +1,15 @@
 package com.petushkov.webappcollections.mappers;
 
 import com.petushkov.webappcollections.dto.CommentDto;
-import com.petushkov.webappcollections.dto.ItemDto;
 import com.petushkov.webappcollections.models.Comment;
-import com.petushkov.webappcollections.models.Item;
-import org.mapstruct.Mapper;
+import org.mapstruct.*;
 
-import java.util.List;
-
-@Mapper(componentModel = "spring")
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface CommentMapper {
+    Comment commentDtoToComment(CommentDto commentDto);
 
-    CommentDto entityToDto(Comment comment);
+    CommentDto commentToCommentDto(Comment comment);
 
-    Comment DtoToEntity(CommentDto commentDto);
-
-    List<CommentDto> entitiesToDtos(List<Comment> comments);
-
-    List<Comment> DtosToEntities(List<CommentDto> commentDtos);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    Comment updateCommentFromCommentDto(CommentDto commentDto, @MappingTarget Comment comment);
 }

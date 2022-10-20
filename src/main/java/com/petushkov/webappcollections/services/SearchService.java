@@ -6,5 +6,5 @@ import java.security.Principal;
 
 public interface SearchService {
 
-    String searchText(String text, Model model, String lang, String style,  Principal principal);
+    String searchText(String text, Model model, String style,  Principal principal);
 }

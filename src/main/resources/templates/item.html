@@ -24,35 +24,27 @@
                     <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                         <li>
                             <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                                <input id="search" type="search" class="form-control form-control-dark"
-                                       placeholder="Search..."
+                                <input id="search" type="search" class="form-control form-control-dark" th:placeholder="#{search-placeholder}"
                                        aria-label="Search">
                             </form>
                         </li>
                     </ul>
                 </div>
                 <div class="text-end">
-                    <div>
+                    <div >
                         <select id="change-style" class="form-select">
-                            <option  value="light" th:selected="${style eq null or style eq 'light'}">light</option>
-                            <option value="dark" th:selected="${style eq 'dark'}">dark</option>
+                            <option  value="light" th:selected="${style eq null or style eq 'light'}" th:text="#{style-light}"></option>
+                            <option value="dark" th:selected="${style eq 'dark'}" th:text="#{style-dark}"></option>
                         </select>
                         <select id="lang" class="form-select">
-                            <option value="en" th:selected="${lang eq null or lang eq 'en'}">en</option>
-                            <option value="ru" th:selected="${lang eq 'ru'}">ru</option>
+                            <option value="en" th:selected="${#locale.toString() eq 'en'}" th:text="#{lang.en}"></option>
+                            <option value="ru" th:selected="${#locale.toString() eq 'ru'}" th:text="#{lang.ru}"></option>
                         </select>
                         <span sec:authorize="hasRole('ADMIN')"><a href="/admin">admin</a></span>
-                        <a sec:authorize="isAuthenticated()" th:href="${'/' + #authentication.name}"
-                           th:text="${#authentication.name}"></a>
-                        <button sec:authorize="isAnonymous()" id="login" type="button"
-                                class="btn btn-primary" onclick="redirect('/login')">Login
-                        </button>
-                        <button sec:authorize="isAuthenticated()" id="logout" type="button" class="btn btn-primary"
-                                onclick="redirect('/logout')">Logout
-                        </button>
-                        <button sec:authorize="isAnonymous()" id="sign-up" type="button" class="btn btn-primary"
-                                onclick="redirect('/sign-up')">Sign-up
-                        </button>
+                        <a sec:authorize="isAuthenticated()" th:href="${'/' + #authentication.name}" th:text="${#authentication.name}"></a>
+                        <button sec:authorize="isAnonymous()" id="login" type="button" class="btn btn-primary" onclick="redirect('/login')" th:text="#{login}"></button>
+                        <button sec:authorize="isAuthenticated()" id="logout" type="button" class="btn btn-primary" onclick="redirect('/logout')" th:text="#{logout}"></button>
+                        <button sec:authorize="isAnonymous()" id="sign-up" type="button" class="btn btn-primary" onclick="redirect('/sign-up')" th:text="#{sign-up}"></button>
                     </div>
                 </div>
             </div>

@@ -15,7 +15,7 @@ import javax.persistence.PrePersist;
 class WebAppCollectionsApplicationTests {
 
 
-    @Test
+   
     void contextLoads() {
 
 

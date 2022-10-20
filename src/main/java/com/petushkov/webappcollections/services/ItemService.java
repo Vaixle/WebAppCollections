@@ -9,8 +9,10 @@ public interface ItemService {
 
     ResponseEntity<?> deleteItem(Long id);
 
-    String getItemPage(String username, Long id, Model model, String lang, String style, Principal principal);
+    String getItemPage(String username, Long id, Model model, String style, Principal principal);
 
     ResponseEntity<?> likeItem(Long id, Principal principal);
+
+    ResponseEntity<?> findTop5ByOrderByCreatedAtDesc();
 
 }

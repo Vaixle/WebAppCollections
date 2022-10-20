@@ -1,17 +1,24 @@
 package com.petushkov.webappcollections.dto;
 
-import com.petushkov.webappcollections.models.Like;
-import com.petushkov.webappcollections.models.Tag;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-import java.util.List;
+import java.io.Serializable;
+import java.util.Date;
 
-@Data
-public class ItemDto {
+/**
+ * A DTO for the {@link com.petushkov.webappcollections.models.Item} entity
+ */
+@AllArgsConstructor
+@Getter
+public class ItemDto implements Serializable {
 
-    private String name;
+    private static final long serialVersionUID = 1L;
 
-    private List<Tag> tags;
-
-    private List<Like> likes;
+    private final Long id;
+    private final Date createdAt;
+//    private final Date updatedAt;
+    private final String name;
+    private final String link;
+    private final ReadOnlyCollectionDto collection;
 }

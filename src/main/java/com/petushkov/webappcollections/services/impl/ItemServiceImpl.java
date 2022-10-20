@@ -1,17 +1,19 @@
 package com.petushkov.webappcollections.services.impl;
 
-import com.petushkov.webappcollections.dto.ItemFieldValueDto;
+import com.petushkov.webappcollections.dto.ItemDto;
+import com.petushkov.webappcollections.mappers.ItemMapper;
 import com.petushkov.webappcollections.models.FieldInitialize;
 import com.petushkov.webappcollections.models.Item;
 import com.petushkov.webappcollections.models.Like;
 import com.petushkov.webappcollections.repositories.ItemRepository;
 import com.petushkov.webappcollections.services.ItemService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
-import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,9 +27,9 @@ public class ItemServiceImpl implements ItemService {
 
     private ItemRepository itemRepository;
 
-    private ChangeLanguageServiceImpl changeLanguageService;
-
     private ChangeStyleServiceImpl changeStyleService;
+
+    private ItemMapper itemMapper;
 
     @Override
     public ResponseEntity<?> deleteItem(Long id) {
@@ -37,10 +39,10 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public String getItemPage(String username, Long id, Model model, String lang, String style, Principal principal) {
+    public String getItemPage(String username, Long id, Model model, String style, Principal principal) {
 
         Item item = itemRepository.findById(id).get();
-        lang = changeLanguageService.changeLanguage(model, lang, principal);
+
         changeStyleService.changeStyle(model, style, principal);
 
         List<FieldInitialize> fieldInitializeNumber = new ArrayList<>();
@@ -83,7 +85,7 @@ public class ItemServiceImpl implements ItemService {
         model.addAttribute("likes", item.getLikes().size());
         model.addAttribute("comments", item.getComments());
 
-        return lang != null && lang.equals("ru") ? "item_ru": "item";
+        return "item";
     }
 
     @Override
@@ -102,6 +104,16 @@ public class ItemServiceImpl implements ItemService {
         }
 
         return ResponseEntity.ok().build();
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<?> findTop5ByOrderByCreatedAtDesc() {
+        List<Item> items = itemRepository.findTop5ByOrderByCreatedAtDesc();
+        List<ItemDto> itemDtos = itemMapper.itemsToItemDtos(items);
+        System.out.println(itemDtos);
+        System.out.println(itemDtos);
+        return new ResponseEntity<>(itemDtos, HttpStatus.OK);
     }
 
 

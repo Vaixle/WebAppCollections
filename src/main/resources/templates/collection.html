@@ -36,8 +36,8 @@
                             <option value="dark" th:selected="${style eq 'dark'}">dark</option>
                         </select>
                         <select id="lang" class="form-select">
-                            <option value="en" th:selected="${lang eq null or lang eq 'en'}">en</option>
-                            <option value="ru" th:selected="${lang eq 'ru'}">ru</option>
+                            <option value="en" th:text="#{lang.eng}"></option>
+                            <option value="ru" th:text="#{lang.ru}"></option>
                         </select>
                         <span sec:authorize="hasRole('ADMIN')"><a href="/admin">admin</a></span>
                         <a sec:authorize="isAuthenticated()" th:href="${'/' + #authentication.name}" th:text="${#authentication.name}"></a>

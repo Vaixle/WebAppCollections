@@ -1,23 +1,22 @@
 package com.petushkov.webappcollections.dto;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.io.Serializable;
+import java.util.Date;
 
-@Data
-public class CommentDto {
-
-    private Long id;
-
-    private String message;
-
-    private String fromUsername;
-
-    private String toUsername;
-
-    private Long itemId;
-
-    private String createdAt;
-
-    private String language;
+/**
+ * A DTO for the {@link com.petushkov.webappcollections.models.Comment} entity
+ */
+@AllArgsConstructor
+@Getter
+public class CommentDto implements Serializable {
+    private final Long id;
+    private final Date createdAt;
+    private final Date updatedAt;
+    private final String message;
+    private final String fromUsername;
+    private final String toUsername;
 }

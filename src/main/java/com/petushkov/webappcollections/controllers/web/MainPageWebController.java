@@ -18,7 +18,7 @@ import java.security.Principal;
 @Controller
 @RequestMapping("/")
 @AllArgsConstructor
-@SessionAttributes(value = {"lang", "style"})
+@SessionAttributes(value = {"style"})
 public class MainPageWebController {
 
     private MainPageServiceImpl mainPageService;
@@ -27,12 +27,9 @@ public class MainPageWebController {
     @ApiOperation(value = "Main page", notes = "Get main page")
     public String getMainPage(
             Model model,
-            @ApiParam(name = "lang", value = "Language for content", example = "en")
-            @RequestParam(required = false) String lang,
-            @ApiParam(name = "style", value = "Style for content", example = "dark")
-            @RequestParam(required = false) String style,
             Principal principal) {
 
-        return mainPageService.getMainPage(model, lang, style, principal);
+        return mainPageService.getMainPage(model, principal);
+
     }
 }

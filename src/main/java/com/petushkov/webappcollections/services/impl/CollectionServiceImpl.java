@@ -3,10 +3,7 @@ package com.petushkov.webappcollections.services.impl;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.petushkov.webappcollections.dto.CollectionDto;
-import com.petushkov.webappcollections.dto.CollectionFullinfDto;
-import com.petushkov.webappcollections.dto.FieldsCreateDto;
 import com.petushkov.webappcollections.dto.ItemDto;
-import com.petushkov.webappcollections.mappers.CollectionItemsFieldsMapper;
 import com.petushkov.webappcollections.mappers.CollectionMapper;
 import com.petushkov.webappcollections.mappers.ItemMapper;
 import com.petushkov.webappcollections.models.*;
@@ -48,168 +45,174 @@ public class CollectionServiceImpl implements CollectionService {
 
     private TagRepository tagRepository;
 
-    private ChangeLanguageServiceImpl changeLanguageService;
-
     private ChangeStyleServiceImpl changeStyleService;
 
     private CollectionMapper collectionMapper;
 
     private ItemMapper itemMapper;
 
-    private CollectionItemsFieldsMapper collectionItemsFieldsMapper;
+
 
     @Value("${cloudinary.api}")
     private String cloudinaryApi;
 
 
-    public CollectionServiceImpl(CollectionRepository collectionRepository, UserRepository userRepository, ItemRepository itemRepository, TagRepository tagRepository, ChangeLanguageServiceImpl changeLanguageService, ChangeStyleServiceImpl changeStyleService, CollectionMapper collectionMapper, ItemMapper itemMapper, CollectionItemsFieldsMapper collectionItemsFieldsMapper) {
+    public CollectionServiceImpl(CollectionRepository collectionRepository, UserRepository userRepository, ItemRepository itemRepository, TagRepository tagRepository, ChangeStyleServiceImpl changeStyleService, CollectionMapper collectionMapper, ItemMapper itemMapper) {
         this.collectionRepository = collectionRepository;
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
         this.tagRepository = tagRepository;
-        this.changeLanguageService = changeLanguageService;
         this.changeStyleService = changeStyleService;
         this.collectionMapper = collectionMapper;
         this.itemMapper = itemMapper;
-        this.collectionItemsFieldsMapper = collectionItemsFieldsMapper;
+
     }
+
+//    @Override
+//    public ResponseEntity<?> createCollection(Optional<String> username, CollectionDto collectionDto) {
+//
+//
+//        if (username.isPresent()) {
+//
+//            if (collectionRepository.existsByNameAndUserUsername(collectionDto.getName(), username.get()))
+//                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+//
+//            Optional<User> optionalUser = userRepository.findByUsername(username.get());
+//
+//            if (optionalUser.isPresent()) {
+//                User user = optionalUser.get();
+//
+//                Collection collection = collectionMapper.collectionDtoToCollection(collectionDto);
+//
+//                collection.setUser(user);
+//                collection.setLink("/" + username.get() + "/collections/" + collection.getName());
+//
+////                try {
+////                    collection = saveImg(collectionDto.getImage(), collection);
+////                } catch (IOException exception) {
+////
+////                }
+//
+//                collectionRepository.save(collection);
+//            }
+//        }
+//
+//        return ResponseEntity.status(HttpStatus.CREATED).build();
+//    }
+
+//    @Override
+//    public ResponseEntity<?> getMarkDownHTML(Long id, CollectionDto collectionDto) {
+//
+//        Collection collection = collectionRepository.findById(id).get();
+//
+//        collection.setDescription(collectionDto.getDescription());
+//        collectionRepository.save(collection);
+////        collectionDto.setDescription(markdownToHTML(collectionDto.getDescription()));
+//
+//        return new ResponseEntity<>(collectionDto, HttpStatus.OK);
+//    }
 
     @Override
-    public ResponseEntity<?> createCollection(Optional<String> username, CollectionDto collectionDto) {
-
-
-        if (username.isPresent()) {
-
-            if (collectionRepository.existsByNameAndUserUsername(collectionDto.getName(), username.get()))
-                return ResponseEntity.status(HttpStatus.CONFLICT).build();
-
-            Optional<User> optionalUser = userRepository.findByUsername(username.get());
-
-            if (optionalUser.isPresent()) {
-                User user = optionalUser.get();
-
-                Collection collection = collectionMapper.DtoToEntity(collectionDto);
-
-                collection.setUser(user);
-                collection.setLink("/" + username.get() + "/collections/" + collection.getName());
-
-                try {
-                    collection = saveImg(collectionDto.getImage(), collection);
-                } catch (IOException exception) {
-
-                }
-
-                collectionRepository.save(collection);
-            }
-        }
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<?> getTop5Collections() {
+        List<Collection> collections = collectionRepository.findTop5CollectionOrderByItemsDesc();
+        List<CollectionDto> collectionDtos = collectionMapper.collectionsToCollectionDtos(collections);
+        return ResponseEntity
+                .ok()
+                .body(collectionMapper.collectionsToCollectionDtos(collectionRepository.findTop5CollectionOrderByItemsDesc()));
     }
 
-    @Override
-    public ResponseEntity<?> getMarkDownHTML(Long id, CollectionDto collectionDto) {
+//    @Override
+//    public ResponseEntity<?> createItem(Long id, ItemDto itemDto) {
+//        Optional<Collection> collectionOptional = collectionRepository.findById(id);
+//
+//        if (collectionOptional.isPresent()) {
+//
+//            Collection collection = collectionOptional.get();
+//            Item item = itemMapper.itemDtoToItem(itemDto);
+//            Set<Field> fields = collection.getFields();
+//            Set<FieldInitialize> fieldsInitialize = new HashSet<>();
+//
+//            fields.forEach(f -> fieldsInitialize.add(createFieldInitialize(f)));
+//
+//            for (FieldInitialize f : fieldsInitialize) {
+//                f.setItem(item);
+//            }
+//
+//            Set<Tag> checkedTags = new HashSet<>();
+//            for (Tag t : item.getTags()) {
+//                Optional<Tag> tag = tagRepository.findByName(t.getName());
+//                if (tag.isPresent()) {
+//                    checkedTags.add(tag.get());
+//                }
+//                checkedTags.add(t);
+//            }
+//
+//            item.setFieldInitialize(fieldsInitialize);
+//            item.setCollection(collection);
+//            item.setTags(checkedTags);
+//            collection.addItem(item);
+//
+//            collectionRepository.save(collection);
+//            item = itemRepository.findFirstByCollectionIdOrderByIdDesc(collection.getId());
+//            item.setLink(collection.getLink() + "/items/" + item.getId());
+//            itemRepository.save(item);
+//
+//            return ResponseEntity.ok().body(item.getId());
+//        }
+//
+//        return ResponseEntity.badRequest().build();
+//    }
 
-        Collection collection = collectionRepository.findById(id).get();
-
-        collection.setDescription(collectionDto.getDescription());
-        collectionRepository.save(collection);
-        collectionDto.setDescription(markdownToHTML(collectionDto.getDescription()));
-
-        return new ResponseEntity<>(collectionDto, HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<?> createItem(Long id, ItemDto itemDto) {
-        Optional<Collection> collectionOptional = collectionRepository.findById(id);
-
-        if (collectionOptional.isPresent()) {
-
-            Collection collection = collectionOptional.get();
-            Item item = itemMapper.DtoToEntity(itemDto);
-            Set<Field> fields = collection.getFields();
-            Set<FieldInitialize> fieldsInitialize = new HashSet<>();
-
-            fields.forEach(f -> fieldsInitialize.add(createFieldInitialize(f)));
-
-            for (FieldInitialize f : fieldsInitialize) {
-                f.setItem(item);
-            }
-
-            Set<Tag> checkedTags = new HashSet<>();
-            for (Tag t : item.getTags()) {
-                Optional<Tag> tag = tagRepository.findByName(t.getName());
-                if (tag.isPresent()) {
-                    checkedTags.add(tag.get());
-                }
-                checkedTags.add(t);
-            }
-
-            item.setFieldInitialize(fieldsInitialize);
-            item.setCollection(collection);
-            item.setTags(checkedTags);
-            collection.addItem(item);
-
-            collectionRepository.save(collection);
-            item = itemRepository.findFirstByCollectionIdOrderByIdDesc(collection.getId());
-            item.setLink(collection.getLink() + "/items/" + item.getId());
-            itemRepository.save(item);
-
-            return ResponseEntity.ok().body(item.getId());
-        }
-
-        return ResponseEntity.badRequest().build();
-    }
-
-    @Override
-    public ResponseEntity<?> setCollectionFields(Long id, FieldsCreateDto fieldsCreateDto) {
-        Optional<Collection> collectionOpt = collectionRepository.findById(id);
-
-        if (collectionOpt.isPresent()) {
-            Collection collection = collectionOpt.get();
-
-            List<Field> fieldsNumber = fieldsCreateDto.getNumber().stream()
-                    .filter(f -> !f.isEmpty())
-                    .map(f -> new Field(f, "number"))
-                    .collect(Collectors.toList());
-
-            List<Field> fieldsText = fieldsCreateDto.getText().stream()
-                    .filter(f -> !f.isEmpty())
-                    .map(f -> new Field(f, "text"))
-                    .collect(Collectors.toList());
-
-            List<Field> fieldsTextarea = fieldsCreateDto.getTextarea().stream()
-                    .filter(f -> !f.isEmpty())
-                    .map(f -> new Field(f, "textarea"))
-                    .collect(Collectors.toList());
-
-            List<Field> fieldsLogic = fieldsCreateDto.getLogic().stream()
-                    .filter(f -> !f.isEmpty())
-                    .map(f -> new Field(f, "logic"))
-                    .collect(Collectors.toList());
-
-            List<Field> fieldsDate = fieldsCreateDto.getDate().stream()
-                    .filter(f -> !f.isEmpty())
-                    .map(f -> new Field(f, "date"))
-                    .collect(Collectors.toList());
-
-            List<Field> fields = new ArrayList<>();
-
-            fields.addAll(fieldsNumber);
-            fields.addAll(fieldsText);
-            fields.addAll(fieldsTextarea);
-            fields.addAll(fieldsLogic);
-            fields.addAll(fieldsDate);
-
-            fields.forEach(f -> f.setCollection(collection));
-
-            collection.setFields(new HashSet<>(fields));
-
-            collectionRepository.save(collection);
-
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return ResponseEntity.badRequest().build();
-    }
+//    @Override
+//    public ResponseEntity<?> setCollectionFields(Long id, FieldsCreateDto fieldsCreateDto) {
+//        Optional<Collection> collectionOpt = collectionRepository.findById(id);
+//
+//        if (collectionOpt.isPresent()) {
+//            Collection collection = collectionOpt.get();
+//
+//            List<Field> fieldsNumber = fieldsCreateDto.getNumber().stream()
+//                    .filter(f -> !f.isEmpty())
+//                    .map(f -> new Field(f, "number"))
+//                    .collect(Collectors.toList());
+//
+//            List<Field> fieldsText = fieldsCreateDto.getText().stream()
+//                    .filter(f -> !f.isEmpty())
+//                    .map(f -> new Field(f, "text"))
+//                    .collect(Collectors.toList());
+//
+//            List<Field> fieldsTextarea = fieldsCreateDto.getTextarea().stream()
+//                    .filter(f -> !f.isEmpty())
+//                    .map(f -> new Field(f, "textarea"))
+//                    .collect(Collectors.toList());
+//
+//            List<Field> fieldsLogic = fieldsCreateDto.getLogic().stream()
+//                    .filter(f -> !f.isEmpty())
+//                    .map(f -> new Field(f, "logic"))
+//                    .collect(Collectors.toList());
+//
+//            List<Field> fieldsDate = fieldsCreateDto.getDate().stream()
+//                    .filter(f -> !f.isEmpty())
+//                    .map(f -> new Field(f, "date"))
+//                    .collect(Collectors.toList());
+//
+//            List<Field> fields = new ArrayList<>();
+//
+//            fields.addAll(fieldsNumber);
+//            fields.addAll(fieldsText);
+//            fields.addAll(fieldsTextarea);
+//            fields.addAll(fieldsLogic);
+//            fields.addAll(fieldsDate);
+//
+//            fields.forEach(f -> f.setCollection(collection));
+//
+//            collection.setFields(new HashSet<>(fields));
+//
+//            collectionRepository.save(collection);
+//
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        }
+//        return ResponseEntity.badRequest().build();
+//    }
 
     @Override
     public ModelAndView findAllCollections(Optional<Long> id, Optional<String> username, Model model) {
@@ -229,14 +232,11 @@ public class CollectionServiceImpl implements CollectionService {
             collections = collectionRepository.findAll();
         }
 
-        List<CollectionDto> collectionDtos = collectionMapper.entitiesToDtos(collections);
+        List<CollectionDto> collectionDtos = collectionMapper.collectionsToCollectionDtos(collections);
 
-        if (model.getAttribute("lang") != null &&
-                model.getAttribute("lang").toString().equals("ru")) {
-            mv = new ModelAndView("user_ru::collections");
-        } else {
-            mv = new ModelAndView("user::collections");
-        }
+
+        mv = new ModelAndView("user::collections");
+
 
         mv.addObject("collections", collectionDtos);
         mv.addObject("username", username.get());
@@ -252,36 +252,32 @@ public class CollectionServiceImpl implements CollectionService {
         return ResponseEntity.ok().build();
     }
 
-    @Override
-    public String getCollectionPage(String username, String collectionName, Model model, String lang, String style, Principal principal) {
-
-        lang = changeLanguageService.changeLanguage(model, lang, principal);
-        changeStyleService.changeStyle(model, style, principal);
-
-
-        Collection collection = collectionRepository.findByNameAndUserUsername(collectionName, username);
-        CollectionFullinfDto collectionFullinfDto = collectionItemsFieldsMapper.entityToDto(collection);
-
-        if (collectionFullinfDto.getDescription() != null) {
-            collectionFullinfDto.setDescription(markdownToHTML(collectionFullinfDto.getDescription()));
-
-        }
-
-        if (model.getAttribute("lang") != null &&
-                model.getAttribute("lang").toString().equals("ru")) {
-            model.addAttribute("collection_ru::description", collectionFullinfDto.getDescription());
-        } else {
-            model.addAttribute("collection::description", collectionFullinfDto.getDescription());
-        }
-
-
-        declareFields(collectionFullinfDto, model);
-
-        model.addAttribute("pageOwner", username);
-
-
-        return lang != null && lang.equals("ru") ? "collection_ru" : "collection";
-    }
+//    @Override
+//    public String getCollectionPage(String username, String collectionName, Model model, String style, Principal principal) {
+//
+//        changeStyleService.changeStyle(model, style, principal);
+//
+//
+//        Collection collection = collectionRepository.findByNameAndUserUsername(collectionName, username);
+//        CollectionFullinfDto collectionFullinfDto = .entityToDto(collection);
+//
+//        if (collectionFullinfDto.getDescription() != null) {
+//            collectionFullinfDto.setDescription(markdownToHTML(collectionFullinfDto.getDescription()));
+//
+//        }
+//
+//
+//        model.addAttribute("collection::description", collectionFullinfDto.getDescription());
+//
+//
+//
+//        declareFields(collectionFullinfDto, model);
+//
+//        model.addAttribute("pageOwner", username);
+//
+//
+//        return "collection";
+//    }
 
 
     private String markdownToHTML(String markdown) {
@@ -306,41 +302,41 @@ public class CollectionServiceImpl implements CollectionService {
 
     }
 
-    private void declareFields(CollectionFullinfDto collection, Model model) {
-        List<Field> fieldNumber = new ArrayList<>();
-        List<Field> fieldText = new ArrayList<>();
-        List<Field> fieldTextArea = new ArrayList<>();
-        List<Field> fieldLogic = new ArrayList<>();
-        List<Field> fieldDate = new ArrayList<>();
-
-        for (Field f : collection.getFields()) {
-
-            switch (f.getType()) {
-                case "number":
-                    fieldNumber.add(f);
-                    break;
-                case "text":
-                    fieldText.add(f);
-                    break;
-                case "textarea":
-                    fieldTextArea.add(f);
-                    break;
-                case "logic":
-                    fieldLogic.add(f);
-                    break;
-                case "date":
-                    fieldDate.add(f);
-                    break;
-            }
-        }
-
-        model.addAttribute("collection", collection);
-        model.addAttribute("number", fieldNumber);
-        model.addAttribute("text", fieldText);
-        model.addAttribute("textarea", fieldTextArea);
-        model.addAttribute("logic", fieldLogic);
-        model.addAttribute("date", fieldDate);
-    }
+//    private void declareFields(CollectionFullinfDto collection, Model model) {
+//        List<Field> fieldNumber = new ArrayList<>();
+//        List<Field> fieldText = new ArrayList<>();
+//        List<Field> fieldTextArea = new ArrayList<>();
+//        List<Field> fieldLogic = new ArrayList<>();
+//        List<Field> fieldDate = new ArrayList<>();
+//
+//        for (Field f : collection.getFields()) {
+//
+//            switch (f.getType()) {
+//                case "number":
+//                    fieldNumber.add(f);
+//                    break;
+//                case "text":
+//                    fieldText.add(f);
+//                    break;
+//                case "textarea":
+//                    fieldTextArea.add(f);
+//                    break;
+//                case "logic":
+//                    fieldLogic.add(f);
+//                    break;
+//                case "date":
+//                    fieldDate.add(f);
+//                    break;
+//            }
+//        }
+//
+//        model.addAttribute("collection", collection);
+//        model.addAttribute("number", fieldNumber);
+//        model.addAttribute("text", fieldText);
+//        model.addAttribute("textarea", fieldTextArea);
+//        model.addAttribute("logic", fieldLogic);
+//        model.addAttribute("date", fieldDate);
+//    }
 
     private Collection saveImg(MultipartFile multfile, Collection collection) throws IOException {
 
@@ -371,5 +367,7 @@ public class CollectionServiceImpl implements CollectionService {
         }
 
     }
+
+
 
 }
